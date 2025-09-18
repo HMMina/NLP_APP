@@ -138,6 +138,7 @@ Document-Term Matrix:
   - Mỗi cột tương ứng với một token trong từ điển
   - Mỗi giá trị là số lần xuất hiện của token trong văn bản
 - Kết quả cho thấy văn bản đã được chuyển đổi thành dạng số học, có thể sử dụng cho các thuật toán học máy
+- Tuy nhiên có thể thấy số chiều của vector khá lớn do số lượng token trong từ điển nhiều
 
 ## Khó khăn gặp phải và cách giải quyết
 ### Vấn đề import module
