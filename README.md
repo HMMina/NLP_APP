@@ -18,15 +18,14 @@
 ```
 
 ## Lab 1: Tokenization
-
 Lab 1 tập trung vào việc xây dựng các tokenizer khác nhau để phân tách văn bản thành các token riêng lẻ:
 
 ### 1. Xây dựng interface
 - Interface `Tokenizer` trong `core/interfaces.py` định nghĩa phương thức `tokenize` để phân tách văn bản
 
 ### 2. Cài đặt các tokenizer
-- **SimpleTokenizer**: Tokenizer đơn giản dựa trên việc thêm khoảng trắng vào trước và sau kí tự đặc biệt, sau đó phân tách văn bản dựa trên khoảng trắng.
-- **RegexTokenizer**: Tokenizer nâng cao sử dụng regular expressions `\w+|[^\w\s]` để lọc ra các token thỏa mãn điều kiện.
+- **SimpleTokenizer**: Trước tiên đưa toàn bộ văn bản về chữ thường sau đó tokenizer đơn giản dựa trên việc thêm khoảng trắng vào trước và sau kí tự đặc biệt, sau đó phân tách văn bản dựa trên khoảng trắng.
+- **RegexTokenizer**: Trước tiên đưa toàn bộ văn bản về chữ thường tokenizer nâng cao sử dụng regular expressions `\w+|[^\w\s]` để lọc ra các token thỏa mãn điều kiện.
 
 ## Lab 2: Vector hóa văn bản (Count Vectorizer)
 
@@ -120,14 +119,16 @@ Document-Term Matrix:
 ## Giải thích kết quả thu được
 ### Lab 1: Tokenization
 - **SimpleTokenizer và RegexTokenizer** đều hiện thực hóa việc phân tách văn bản thành các token riêng lẻ
-- Kết quả cho thấy cả hai tokenizer đều phân tách chính xác văn bản dựa trên khoảng trắng và dấu câu
+- Kết quả cho thấy cả hai tokenizer đều phân tách chính xác văn bản dựa trên khoảng trắng và dấu câu 
+- Cả hai đều cho ra kết quả giống nhau trong các ví dụ thử nghiệm bởi logic phân tách đều được thiết kế để xử lý các trường hợp cơ bản như dấu câu và chữ
 - **SimpleTokenizer** sử dụng phương pháp đơn giản:
+  - Chuyển toàn bộ văn bản về chữ thường
   - Thêm khoảng trắng trước và sau các ký tự đặc biệt
-  - Tách chuỗi dựa trên khoảng trắng và chuyển về chữ thường
+  - Tách chuỗi dựa trên khoảng trắng
 
 - **RegexTokenizer** sử dụng biểu thức chính quy:
-  - Mẫu `\w+|[^\w\s]` giúp tìm kiếm các từ hoặc ký tự đặc biệt
-  - Phân tách được cả từ và ký tự đặc biệt một cách chính xác
+  - Chuyển toàn bộ văn bản về chữ thường
+  - Mẫu `\w+|[^\w\s]` giúp tìm kiếm các từ hoặc ký tự đặc biệt thỏa mãn điều kiện
 
 ### Lab 2: Count Vectorizer
 - **CountVectorizer** chuyển đổi văn bản thành vector đặc trưng dựa trên tần suất xuất hiện của các token
