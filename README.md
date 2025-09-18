@@ -18,24 +18,23 @@
 ```
 
 ## Lab 1: Tokenization
-Lab 1 tập trung vào việc xây dựng các tokenizer khác nhau để phân tách văn bản thành các token riêng lẻ:
+Lab 1 tập trung vào việc xây dựng các phương pháp tokenizer khác nhau để phân tách văn bản thành các token riêng lẻ:
 
 ### 1. Xây dựng interface
-- Interface `Tokenizer` trong `core/interfaces.py` định nghĩa phương thức `tokenize` để phân tách văn bản
+- Interface `Tokenizer` trong `src/core/interfaces.py` định nghĩa phương thức `tokenize` để phân tách văn bản
 
 ### 2. Cài đặt các tokenizer
-- **SimpleTokenizer**: Trước tiên đưa toàn bộ văn bản về chữ thường sau đó tokenizer đơn giản dựa trên việc thêm khoảng trắng vào trước và sau kí tự đặc biệt, sau đó phân tách văn bản dựa trên khoảng trắng.
-- **RegexTokenizer**: Trước tiên đưa toàn bộ văn bản về chữ thường tokenizer nâng cao sử dụng regular expressions `\w+|[^\w\s]` để lọc ra các token thỏa mãn điều kiện.
+- **SimpleTokenizer** trong `src/preprocessing/simple_tokenizer.py` sử dụng phương pháp đơn giản dựa trên việc thêm khoảng trắng vào trước và sau kí tự đặc biệt, sau đó phân tách văn bản dựa trên khoảng trắng.
+- **RegexTokenizer** trong `src/preprocessing/regex_tokenizer.py` sử dụng biểu thức chính quy để lọc ra các token dựa trên mẫu `\w+|[^\w\s]`, giúp nhận diện từ và ký tự đặc biệt.
+
 
 ## Lab 2: Vector hóa văn bản (Count Vectorizer)
-
 Lab 2 tập trung vào việc vector hóa văn bản sử dụng kỹ thuật Count Vectorizer:
-
 ### 1. Xây dựng interface
-- Interface `Vectorizer` trong `core/interfaces.py` định nghĩa các phương thức cần thiết
+- Interface `Vectorizer` trong `src/core/interfaces.py` định nghĩa các phương thức cần thiết
 
 ### 2. Cài đặt Count Vectorizer
-- `CountVectorizer` trong `representations/count_vectorizer.py` khởi tạo từ điển từ tập hợp các token
+- `CountVectorizer` trong `src/representations/count_vectorizer.py` khởi tạo từ điển từ tập hợp các token
 - Chuyển đổi văn bản thành vector đặc trưng dựa trên tần suất xuất hiện của các token
 
 ## Cách chạy code
@@ -45,13 +44,20 @@ Lab 2 tập trung vào việc vector hóa văn bản sử dụng kỹ thuật Co
 pip install -r requirements.txt
 ```
 
-### Chạy các file test trong VSCode
+### Chạy các file test trong VSCode (chạy trực tiếp trong IDE)
 - Mở file `lab1_test.py` trong thư mục `test/` và chạy để kiểm tra Tokenizers
 - Mở file `lab2_test.py` trong thư mục `test/` và chạy để kiểm tra Count Vectorizer
 
 ## Log kết quả
 ### Lab 1: Kết quả Tokenization
 #### Testing Task 2/Lab1:
+```
+sentences = [
+        "Hello, world! This is a test.",
+        "NLP is fascinating... isn't it?",
+        "Let's see how it handles 123 numbers and punctuation!"
+    ]
+```
 
 ```
 Original: Hello, world! This is a test.
@@ -86,14 +92,13 @@ RegexTokenizer Output (first 20 tokens):
 
 ### Lab 2: Kết quả Count Vectorizer
 #### Testing Corpus:
-
 ```
 corpus = [
         "I love NLP.",
         "I love programming.",
         "NLP is a subfield of AI."
     ]
-
+```
 Count Vectorizer Test Corpus:
 Vocabulary: {".", "a", "ai", "i", "is", "love", "nlp", "of", "programming", "subfield"}
 Document-Term Matrix:
