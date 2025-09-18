@@ -99,6 +99,8 @@ corpus = [
         "NLP is a subfield of AI."
     ]
 ```
+
+```
 Count Vectorizer Test Corpus:
 Vocabulary: {".", "a", "ai", "i", "is", "love", "nlp", "of", "programming", "subfield"}
 Document-Term Matrix:
