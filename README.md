@@ -51,10 +51,8 @@ pip install -r requirements.txt
 - Mở file `lab2_test.py` trong thư mục `test/` và chạy để kiểm tra Count Vectorizer
 
 ## Log kết quả
-
 ### Lab 1: Kết quả Tokenization
-
-#### Testing Task 2:
+#### Testing Task 2/Lab1:
 
 ```
 Original: Hello, world! This is a test.
@@ -70,7 +68,7 @@ SimpleTokenizer: ["let", "'", "s", "see", "how", "it", "handles", "123", "number
 RegexTokenizer: ["let", "'", "s", "see", "how", "it", "handles", "123", "numbers", "and", "punctuation", "!"]
 ```
 
-#### Testing Task 3:
+#### Testing Task 3/Lab1:
 
 ```
 Testing Task 3:
@@ -88,26 +86,41 @@ RegexTokenizer Output (first 20 tokens):
 ```
 
 ### Lab 2: Kết quả Count Vectorizer
-
 #### Testing Corpus:
 
 ```
+corpus = [
+        "I love NLP.",
+        "I love programming.",
+        "NLP is a subfield of AI."
+    ]
+
 Count Vectorizer Test Corpus:
 Vocabulary: {".", "a", "ai", "i", "is", "love", "nlp", "of", "programming", "subfield"}
-
 Document-Term Matrix:
-[1, 0, 0, 1, 0, 1, 1, 0, 0, 0]  // "I love NLP."
-[1, 0, 0, 1, 0, 1, 0, 0, 1, 0]  // "I love programming."
-[1, 1, 1, 0, 1, 0, 1, 1, 0, 1]  // "NLP is a subfield of AI."
+[1, 0, 0, 1, 0, 1, 1, 0, 0, 0]
+[1, 0, 0, 1, 0, 1, 0, 0, 1, 0]
+[1, 1, 1, 0, 1, 0, 1, 1, 0, 1]
 ```
 
+#### Testing với dữ liệu UD_English-EWT (5 dòng đầu tiên):
+
+```
+Count Vectorizer New Corpus from UD_English-EWT:
+Vocabulary: {'!': 0, ',': 1, '-': 2, '.': 3, '2': 4, '3': 5, ':': 6, '[': 7, ']': 8, 'a': 9, 'abdullah': 10, 'al': 11, 'american': 12, 'ani': 13, 'announced': 14, 'at': 15, 'authorities': 16, 'baghdad': 17, 'be': 18, 'being': 19, 'border': 20, 'busted': 21, 'by': 22, 'causing': 23, 'cells': 24, 'cleric': 25, 'come': 26, 'dpa': 27, 'for': 28, 'forces': 29, 'had': 30, 'in': 31, 'interior': 32, 'iraqi': 33, 'killed': 34, 'killing': 35, 'ministry': 36, 'moi': 37, 'mosque': 38, 'near': 39, 'of': 40, 'officials': 41, 'operating': 42, 'preacher': 43, 'qaim': 44, 'respected': 45, 'run': 46, 'shaikh': 47, 'syrian': 48, 'terrorist': 49, 'that': 50, 'the': 51, 'them': 52, 'they': 53, 'this': 54, 'to': 55, 'town': 56, 'trouble': 57, 'two': 58, 'up': 59, 'us': 60, 'were': 61, 'will': 62, 'years': 63, 'zaman': 64}
+Document-Term Matrix:
+[0, 1, 2, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+[0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 2, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0]
+[0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0]
+[1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+```
+
+
 ## Giải thích kết quả thu được
-
 ### Lab 1: Tokenization
-
 - **SimpleTokenizer và RegexTokenizer** đều hiện thực hóa việc phân tách văn bản thành các token riêng lẻ
 - Kết quả cho thấy cả hai tokenizer đều phân tách chính xác văn bản dựa trên khoảng trắng và dấu câu
-
 - **SimpleTokenizer** sử dụng phương pháp đơn giản:
   - Thêm khoảng trắng trước và sau các ký tự đặc biệt
   - Tách chuỗi dựa trên khoảng trắng và chuyển về chữ thường
@@ -117,7 +130,6 @@ Document-Term Matrix:
   - Phân tách được cả từ và ký tự đặc biệt một cách chính xác
 
 ### Lab 2: Count Vectorizer
-
 - **CountVectorizer** chuyển đổi văn bản thành vector đặc trưng dựa trên tần suất xuất hiện của các token
 - **Vocabulary** được xây dựng từ tất cả các token duy nhất trong corpus, sắp xếp theo thứ tự từ điển
 - **Document-Term Matrix** hiển thị:
@@ -127,27 +139,19 @@ Document-Term Matrix:
 - Kết quả cho thấy văn bản đã được chuyển đổi thành dạng số học, có thể sử dụng cho các thuật toán học máy
 
 ## Khó khăn gặp phải và cách giải quyết
-
 ### Vấn đề import module
-
 **Khó khăn:** 
 - Khi chạy file test từ terminal, gặp lỗi:
   ```
   ModuleNotFoundError: No module named 'src'
   ```
-  hoặc 
-  ```
-  ModuleNotFoundError: No module named 'Lab1'
-  ```
 - Các module không thể tìm thấy do đường dẫn import không phù hợp với cấu trúc thư mục
-
 **Giải pháp:**
-- Thêm đường dẫn gốc của workspace vào `sys.path` để Python có thể tìm thấy các module
-- Sử dụng đoạn code sau ở đầu file test:
+- Sử dụng đoạn code sau ở đầu file cần thiết:
   ```python
-  import sys
-  import os
-  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+    import sys
+    import os
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
   ```
 - Sửa lại các import để phù hợp với cấu trúc thư mục
 
