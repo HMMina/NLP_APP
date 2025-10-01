@@ -24,7 +24,7 @@ val pipeline = new Pipeline()
 ```
 
 **Các Giai Đoạn Pipeline:**
-1. **RegexTokenizer**: Phân tách văn bản sử dụng pattern "\\s+|[.,;!?()\"']"(ký tự không phải từ)
+1. **RegexTokenizer**: Phân tách văn bản sử dụng pattern "\\s+|[.,;!?()\"']" (khoảng trắng và dấu câu)
 2. **StopWordsRemover**: Lọc bỏ các từ dừng tiếng Anh phổ biến
 3. **HashingTF**: Chuyển đổi tokens thành vectors tần suất từ (20,000 features)
 4. **IDF**: Áp dụng trọng số tần suất nghịch đảo văn bản
@@ -32,7 +32,7 @@ val pipeline = new Pipeline()
 ### 4. Chiến Lược Tokenization
 - **Chính**: RegexTokenizer với pattern "\\s+|[.,;!?()\"']"
 - **Thay thế**: Basic Tokenizer (dựa trên khoảng trắng) có sẵn dưới dạng comment
-- RegexTokenizer xử lý tốt hơn dấu câu và ký tự đặc biệt
+- RegexTokenizer xử lý tốt hơn dấu câu và ký tự đặc biệt bằng cách tách theo khoảng trắng và các dấu câu phổ biến
 
 ### 5. Quá Trình Vector Hóa
 - **HashingTF**: 
