@@ -1,0 +1,17 @@
+Pipeline started at: 2025-10-01 19:55:14
+SparkSession created successfully
+Loading data from: ../../c4-train.00000-of-01024-30K.json
+Loaded 1000 records
+Tokenizer configured
+StopWordsRemover configured
+HashingTF configured with 20000 features
+IDF configured
+Pipeline configured
+Starting pipeline fitting...
+Pipeline fitting completed
+Saving results to file...
+Results saved successfully to results/lab17_pipeline_output.txt
+Total documents processed: 1000
+Vocabulary size (HashingTF): 20000
+Pipeline completed successfully at: 2025-10-01 19:55:24
+Spark session closed successfully
