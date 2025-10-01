@@ -24,13 +24,13 @@ val pipeline = new Pipeline()
 ```
 
 **Các Giai Đoạn Pipeline:**
-1. **RegexTokenizer**: Phân tách văn bản sử dụng pattern `\\W+` (ký tự không phải từ)
+1. **RegexTokenizer**: Phân tách văn bản sử dụng pattern "\\s+|[.,;!?()\"']"(ký tự không phải từ)
 2. **StopWordsRemover**: Lọc bỏ các từ dừng tiếng Anh phổ biến
 3. **HashingTF**: Chuyển đổi tokens thành vectors tần suất từ (20,000 features)
 4. **IDF**: Áp dụng trọng số tần suất nghịch đảo văn bản
 
 ### 4. Chiến Lược Tokenization
-- **Chính**: RegexTokenizer với pattern `\\W+`
+- **Chính**: RegexTokenizer với pattern "\\s+|[.,;!?()\"']"
 - **Thay thế**: Basic Tokenizer (dựa trên khoảng trắng) có sẵn dưới dạng comment
 - RegexTokenizer xử lý tốt hơn dấu câu và ký tự đặc biệt
 
@@ -94,7 +94,6 @@ Spark session closed successfully
 ### Thống Kê Dữ Liệu
 - **Tổng số văn bản được xử lý**: 1,000
 - **Kích thước vector đặc trưng**: 20,000 chiều
-- **Thời gian xử lý**: ~16 giây
 
 ### Định Dạng Kết Quả Mẫu
 ```
