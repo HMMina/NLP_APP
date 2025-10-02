@@ -1,4 +1,4 @@
-# Báo Cáo Lab: Spark NLP Pipeline với TF-IDF
+# Báo Cáo Lab: Enhanced Spark NLP Pipeline với TF-IDF và Document Similarity
 ## Các Bước Triển Khai
 
 ### 1. Thiết Lập Môi Trường
@@ -7,34 +7,54 @@
 - **Phiên bản Java**: 19.0.1
 - **Phiên bản SBT**: 1.11.0
 
-### 2. Tải Dữ Liệu
+### 2. Enhanced Features (New Enhancements)
+- **✅ Customizable Document Limit**: Variable `limitDocuments` để dễ dàng thay đổi số lượng documents
+- **✅ Detailed Performance Measurement**: Đo thời gian thực thi từng stage chính
+- **✅ Vector Normalization**: Normalizer layer để chuẩn hóa TF-IDF vectors  
+- **✅ Document Similarity Analysis**: Tìm top 5 documents tương tự nhất sử dụng cosine similarity
+
+### 3. Tải Dữ Liệu
 ```scala
+val limitDocuments = 1000 // Easily configurable document limit
 val df = spark.read.json("../../c4-train.00000-of-01024-30K.json")
-  .limit(1000) // Giới hạn 1000 bản ghi để thực thi nhanh hơn
+  .limit(limitDocuments) // Use configurable limit
 val textDF = df.select("text").na.drop()
 ```
-- Tải thành công bộ dữ liệu C4 vào Spark DataFrame
+- Tải thành công bộ dữ liệu C4 compressed (.json.gz) vào Spark DataFrame
+- Spark tự động xử lý decompression cho file .gz
 - Áp dụng làm sạch dữ liệu bằng cách loại bỏ giá trị null
-- Giới hạn kích thước dữ liệu cho mục đích demo
+- Sử dụng biến `limitDocuments` để dễ dàng điều chỉnh kích thước dataset
 
-### 3. Triển Khai Pipeline
+### 4. Dual Pipeline Implementation (Enhanced Feature)
 ```scala
-val pipeline = new Pipeline()
+// Pipeline 1: Basic TF-IDF (no normalization)
+val basicPipeline = new Pipeline()
   .setStages(Array(tokenizer, remover, hashingTF, idf))
+
+// Pipeline 2: Enhanced TF-IDF + Normalizer
+val enhancedPipeline = new Pipeline()
+  .setStages(Array(tokenizer, remover, hashingTF, idf, normalizer))
 ```
 
-**Các Giai Đoạn Pipeline:**
+**Pipeline 1 - Basic TF-IDF Stages:**
 1. **RegexTokenizer**: Phân tách văn bản sử dụng pattern "\\s+|[.,;!?()\"']" (khoảng trắng và dấu câu)
 2. **StopWordsRemover**: Lọc bỏ các từ dừng tiếng Anh phổ biến
 3. **HashingTF**: Chuyển đổi tokens thành vectors tần suất từ (20,000 features)
 4. **IDF**: Áp dụng trọng số tần suất nghịch đảo văn bản
 
-### 4. Chiến Lược Tokenization
+**Pipeline 2 - Enhanced TF-IDF + Normalization Stages:**
+1. **RegexTokenizer**: Phân tách văn bản sử dụng pattern "\\s+|[.,;!?()\"']" (khoảng trắng và dấu câu)
+2. **StopWordsRemover**: Lọc bỏ các từ dừng tiếng Anh phổ biến
+3. **HashingTF**: Chuyển đổi tokens thành vectors tần suất từ (20,000 features)
+4. **IDF**: Áp dụng trọng số tần suất nghịch đảo văn bản
+5. **Normalizer** (New): Chuẩn hóa vectors với L2 normalization để tối ưu cosine similarity
+
+### 5. Chiến Lược Tokenization
 - **Chính**: RegexTokenizer với pattern "\\s+|[.,;!?()\"']"
 - **Thay thế**: Basic Tokenizer (dựa trên khoảng trắng) có sẵn dưới dạng comment
 - RegexTokenizer xử lý tốt hơn dấu câu và ký tự đặc biệt bằng cách tách theo khoảng trắng và các dấu câu phổ biến
 
-### 5. Quá Trình Vector Hóa
+### 6. Enhanced Vector Processing
 - **HashingTF**: 
   - Không gian đặc trưng: 20,000 chiều
   - Xử lý va chạm hash cho từ vựng lớn
@@ -42,6 +62,30 @@ val pipeline = new Pipeline()
 - **IDF**: 
   - Giảm tầm quan trọng của các từ xuất hiện thường xuyên
   - Nhấn mạnh các từ độc đáo, mang tính thông tin
+- **Normalizer (New)**: 
+  - L2 normalization để chuẩn hóa độ dài vector
+  - Tối ưu hóa cho cosine similarity calculation
+  - Đảm bảo so sánh documents dựa trên nội dung thay vì độ dài
+
+### 7. Dual Pipeline Training & Comparison (New Feature)
+```scala
+// Train Basic Pipeline
+val basicModel = basicPipeline.fit(textDF)
+val basicResult = basicModel.transform(textDF)
+
+// Train Enhanced Pipeline  
+val enhancedModel = enhancedPipeline.fit(textDF)
+val enhancedResult = enhancedModel.transform(textDF)
+```
+- **Training Comparison**: So sánh thời gian training giữa 2 pipelines
+- **Performance Analysis**: Tính toán overhead của Normalizer
+- **Result Comparison**: So sánh output vectors giữa basic và enhanced pipeline
+
+### 8. Document Similarity Analysis (New Feature)
+- **Cosine Similarity**: Tính toán độ tương tự giữa documents sử dụng normalized vectors
+- **Top-K Search**: Tìm 5 documents tương tự nhất với reference document
+- **Performance Optimized**: Sử dụng enhanced pipeline results để accuracy cao hơn
+- **Normalized Vector Benefits**: Cosine similarity = dot product cho normalized vectors
 
 ## Cách Chạy Code
 ### Các Bước Thực Thi
@@ -59,53 +103,125 @@ sbt compile
 sbt run
 ```
 
-### Cấu Trúc Kết Quả Mong Đợi
+### Cấu Trúc Kết Quả Enhanced
 ```
 log/
-├── pipeline_YYYYMMDD_HHMMSS.log    # Log quá trình với timestamps
+├── pipeline_YYYYMMDD_HHMMSS.log    # Enhanced log với performance metrics
 results/
-├── lab17_pipeline_output.txt       # Kết quả chính thức theo yêu cầu
+├── lab17_pipeline_output.txt       # Kết quả với similarity analysis
 ```
 
-### Nội Dung Log File
+### Enhanced Log File Content (Dual Pipeline)
 ```
-Pipeline started at: 2025-10-01 19:55:14
+Pipeline started at: 2025-10-02 19:19:47
 SparkSession created successfully
 Loading data from: ../../c4-train.00000-of-01024-30K.json
+Document limit: 1000
 Loaded 1000 records
+Data loading time: 4417ms
 Tokenizer configured
 StopWordsRemover configured
 HashingTF configured with 20000 features
 IDF configured
-Pipeline configured
-Starting pipeline fitting...
-Pipeline fitting completed
-Saving results to file...
+Normalizer configured (L2 normalization)
+Two pipelines configured: Basic (TF-IDF only) and Enhanced (TF-IDF + Normalizer)
+Pipeline configuration time: 91ms
+Training both pipelines for comparison...
+Both pipelines trained successfully
+Basic pipeline time: 3156ms
+Enhanced pipeline time: 1307ms
+Total pipeline training time: 4463ms
+Reference Document (index 0): Beginners BBQ Class Taking Place in Missoula!
+Do you want to get better at making delicious BBQ? You...
+
+=== Document Similarity Analysis ===
+Reference Document Index: 0
+Reference Text: Beginners BBQ Class Taking Place in Missoula!
+Do you want to get better at making delicious BBQ? You...
+
+Top 5 Similar Documents:
+1. Document 440 (Similarity: 0.08582317557998272)
+   Text: Check out the Italian Pasta Salad calories and how many carbs in Italian Pasta Salad. Learn all the ...
+2. Document 984 (Similarity: 0.07888578933197207)
+   Text: Enjoy our variety of meat cuts prepared with authentic Southern Brazilian Style using our open fire ...
+3. Document 54 (Similarity: 0.07839351684019706)
+   Text: Know Buckeye Trail Class of 2001 graduates that are NOT on this List? Help us Update the 2001 Class ...
+4. Document 278 (Similarity: 0.07389571072682868)
+   Text: Class A Burn Prop - Stove Simulator With Overhead Burn Hood - Fire Facilities, Inc.
+The stove simula...
+5. Document 684 (Similarity: 0.07217586566622101)
+   Text: Many students have never been to a museum before. While we want children to respect the museum and i...
+Similarity analysis time: 1152ms
+Saving pipeline comparison results to file...
 Results saved successfully to results/lab17_pipeline_output.txt
+File writing time: 1574ms
+=== Dual Pipeline Performance Summary ===
 Total documents processed: 1000
+Document limit setting: 1000
 Vocabulary size (HashingTF): 20000
-Pipeline completed successfully at: 2025-10-01 19:55:24
+Performance breakdown:
+  Data loading: 4417ms
+  Pipeline configuration: 91ms
+  Basic pipeline training: 3156ms
+  Enhanced pipeline training: 1307ms
+  Similarity analysis: 1152ms
+  File writing: 1574ms
+  Total processing time: 11697ms
+  Normalizer overhead: -1849ms
+  Total pipeline time: 4463ms
+Enhanced pipeline completed successfully at: 2025-10-02 19:20:01
+Total execution time: 14108ms
 Spark session closed successfully
 
 ```
 
-## Phân Tích Kết Quả
+## Enhanced Results Analysis
 
-### Thống Kê Dữ Liệu
-- **Tổng số văn bản được xử lý**: 1,000
-- **Kích thước vector đặc trưng**: 20,000 chiều
+### Enhanced Statistics
+- **Tổng số văn bản được xử lý**: Configurable via `limitDocuments`
+- **Kích thước vector đặc trưng**: 20,000 chiều 
+- **Pipeline comparison**: Basic TF-IDF vs Enhanced TF-IDF + Normalizer
+- **Vector normalization**: L2 normalization cho enhanced pipeline
+- **Cosine similarity**: Optimized với normalized vectors
+- **Top similar documents**: 5 documents với highest cosine similarity
 
-### Định Dạng Kết Quả Mẫu
+### Enhanced Output Format (Dual Pipeline Comparison)
 ```
+Pipeline 1: Basic TF-IDF (no normalization)
+Pipeline 2: Enhanced TF-IDF + L2 Normalization
+==================================================
+
 Document 1:
-Text: Beginners BBQ Class Taking Place in Missoula!...
-Features: (20000,[264,298,673,717,829,1271,1466,1499,1600...],[....])
-
+Text: Beginners BBQ Class Taking Place in Missoula!
+Do you want to get better at making delicious BBQ? You...
+Basic TF-IDF Features: (20000,[264,298,673,717,829,1271,1466,1499...],[....])
+Normalized TF-IDF Features: (20000,[264,298,673,717,829,1271,1466...],[....])
+------------------------------
 Document 2:
-Text: Text: Discussion in 'Mac OS X Lion (10.7)'....
-Features: (20000,[406,643,651,1023,1349,1695,1845,1850,1994...],[....])
-
+Text: Discussion in 'Mac OS X Lion (10.7)' started by axboi87, Jan 20, 2012.
+I've got a 500gb internal dri...
+Basic TF-IDF Features: (20000,[406,643,651,1023,1349,1695...],[....])
+Normalized TF-IDF Features: (20000,[406,643,651,1023,1349...],[....])
 ....
+
+
+=== Document Similarity Analysis ===
+Reference Document: Beginners BBQ Class Taking Place in Missoula!
+Do you want to get better at making delicious BBQ? You...
+Top 5 Similar Documents:
+1. Document 440 (Similarity: 0.08582317557998272)
+   Text: Check out the Italian Pasta Salad calories and how many carbs in Italian Pasta Salad. Learn all the ...
+2. Document 984 (Similarity: 0.07888578933197207)
+   Text: Enjoy our variety of meat cuts prepared with authentic Southern Brazilian Style using our open fire ...
+3. Document 54 (Similarity: 0.07839351684019706)
+   Text: Know Buckeye Trail Class of 2001 graduates that are NOT on this List? Help us Update the 2001 Class ...
+4. Document 278 (Similarity: 0.07389571072682868)
+   Text: Class A Burn Prop - Stove Simulator With Overhead Burn Hood - Fire Facilities, Inc.
+The stove simula...
+5. Document 684 (Similarity: 0.07217586566622101)
+   Text: Many students have never been to a museum before. While we want children to respect the museum and i...
+=== End of Output ===
+
 ```
 
 ### Kiểm Tra Kết Quả
@@ -141,17 +257,28 @@ javaOptions ++= Seq(
 - Nhầm lẫn vị trí file dữ liệu
 
 **Giải pháp**: 
-- Sử dụng đường dẫn tương đối `../../c4-train.00000-of-01024-30K.json` từ thư mục spark_labs
+- Sử dụng đường dẫn tương đối `../../c4-train.00000-of-01024-30K.json` từ thư mục
 - Thêm logging phù hợp để theo dõi trạng thái tải file
 
-### 3. Triển Khai Logging
+### 3. Dual Pipeline Performance Optimization
 **Vấn đề**: 
-- Cần logging quá trình toàn diện như yêu cầu
+- Cần so sánh hiệu quả giữa basic TF-IDF và normalized TF-IDF
+- Overhead của normalization step
 
 **Giải pháp**: 
-- Triển khai custom logging sử dụng Java PrintWriter
-- Thêm timestamps và theo dõi lỗi
-- Tạo các file log riêng biệt cho mỗi lần chạy
+- Implement dual pipeline architecture để training parallel
+- Đo performance metrics chi tiết cho từng pipeline
+- Tính toán overhead percentage của normalization
+
+### 4. Cosine Similarity Optimization  
+**Vấn đề**:
+- Cosine similarity calculation phức tạp cho raw TF-IDF vectors
+- Performance issue với large vocabulary
+
+**Giải pháp**:
+- Sử dụng L2 normalized vectors: cosine similarity = dot product
+- Caching intermediate results cho performance
+- Optimized vector operations với Spark MLlib
 
 ## Kiến Trúc Code
 ### Cấu Trúc Class
@@ -190,5 +317,7 @@ Spark NLP pipeline đã triển khai thành công tất cả các thành phần 
 - ✅ Nhập dữ liệu từ bộ dữ liệu C4
 - ✅ Tiền xử lý văn bản với tokenization và loại bỏ từ dừng
 - ✅ Vector hóa TF-IDF cho biểu diễn số
+- ✅ L2 normalization cho vector đặc trưng
+- ✅ Phân tích độ tương tự văn bản với cosine similarity
 - ✅ Logging toàn diện và lưu trữ kết quả
 - ✅ Xử lý lỗi và quản lý tài nguyên

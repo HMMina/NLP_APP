@@ -1,0 +1,59 @@
+Pipeline started at: 2025-10-02 19:19:47
+SparkSession created successfully
+Loading data from: ../../c4-train.00000-of-01024-30K.json
+Document limit: 1000
+Loaded 1000 records
+Data loading time: 4417ms
+Tokenizer configured
+StopWordsRemover configured
+HashingTF configured with 20000 features
+IDF configured
+Normalizer configured (L2 normalization)
+Two pipelines configured: Basic (TF-IDF only) and Enhanced (TF-IDF + Normalizer)
+Pipeline configuration time: 91ms
+Training both pipelines for comparison...
+Both pipelines trained successfully
+Basic pipeline time: 3156ms
+Enhanced pipeline time: 1307ms
+Total pipeline training time: 4463ms
+Reference Document (index 0): Beginners BBQ Class Taking Place in Missoula!
+Do you want to get better at making delicious BBQ? You...
+
+=== Document Similarity Analysis ===
+Reference Document Index: 0
+Reference Text: Beginners BBQ Class Taking Place in Missoula!
+Do you want to get better at making delicious BBQ? You...
+
+Top 5 Similar Documents:
+1. Document 440 (Similarity: 0.08582317557998272)
+   Text: Check out the Italian Pasta Salad calories and how many carbs in Italian Pasta Salad. Learn all the ...
+2. Document 984 (Similarity: 0.07888578933197207)
+   Text: Enjoy our variety of meat cuts prepared with authentic Southern Brazilian Style using our open fire ...
+3. Document 54 (Similarity: 0.07839351684019706)
+   Text: Know Buckeye Trail Class of 2001 graduates that are NOT on this List? Help us Update the 2001 Class ...
+4. Document 278 (Similarity: 0.07389571072682868)
+   Text: Class A Burn Prop - Stove Simulator With Overhead Burn Hood - Fire Facilities, Inc.
+The stove simula...
+5. Document 684 (Similarity: 0.07217586566622101)
+   Text: Many students have never been to a museum before. While we want children to respect the museum and i...
+Similarity analysis time: 1152ms
+Saving pipeline comparison results to file...
+Results saved successfully to results/lab17_pipeline_output.txt
+File writing time: 1574ms
+=== Dual Pipeline Performance Summary ===
+Total documents processed: 1000
+Document limit setting: 1000
+Vocabulary size (HashingTF): 20000
+Performance breakdown:
+  Data loading: 4417ms
+  Pipeline configuration: 91ms
+  Basic pipeline training: 3156ms
+  Enhanced pipeline training: 1307ms
+  Similarity analysis: 1152ms
+  File writing: 1574ms
+  Total processing time: 11697ms
+  Normalizer overhead: -1849ms
+  Total pipeline time: 4463ms
+Enhanced pipeline completed successfully at: 2025-10-02 19:20:01
+Total execution time: 14108ms
+Spark session closed successfully
