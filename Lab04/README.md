@@ -153,18 +153,18 @@ Huấn luyện xong!
 === Step 4: Demo sử dụng mô hình ===
 
 Từ tương tự 'computer':
-  kitten: 0.9972
-  age: 0.9972
-  unfortunately: 0.9963
-  steps: 0.9963
-  stand: 0.9963
+  pull: 0.9972
+  graduate: 0.9971
+  touch: 0.9968
+  sit: 0.9967
+  box: 0.9967
 
 Phép tương tự (king - man + woman):
-  launcher: 0.9908
-  tumor: 0.9899
-  volunteer: 0.9894
-  cell: 0.9885
-  chicks: 0.9885
+  harmless: 0.9902
+  meiring: 0.9898
+  elsewhere: 0.9887
+  stalls: 0.9884
+  privileged: 0.9880
 ```
 
 ### Task 4 (lab4_spark_word2vec_demo.py)
@@ -319,62 +319,87 @@ Min count: 2
 #### 2.1. Kết Quả "computer"
 **Output:**
 ```
-kitten         0.9972
-age            0.9972
-unfortunately  0.9963
-steps          0.9963
-stand          0.9963
+pull       0.9972
+graduate   0.9971
+touch      0.9968
+sit        0.9967
+box        0.9967
 ```
 
 **Phân tích:**
 - ❌ **Kết quả sai hoàn toàn** - Các từ không liên quan đến computer
-- ❌ **Score quá cao** (>0.99) - Dấu hiệu của overfitting
-- ❌ **Từ ngẫu nhiên** - kitten, age, unfortunately không có semantic relationship
+- ❌ **Score quá cao** (>0.99) - Dấu hiệu của overfitting nghiêm trọng
+- ❌ **Từ ngẫu nhiên** - pull, graduate, touch, sit, box không có semantic relationship với computer
 
 **Nguyên nhân:**
 1. **Dataset quá nhỏ** (14K câu)
    - GloVe train trên 6 billion tokens
    - Custom model chỉ có ~200K tokens (30,000x ít hơn)
+   - Không đủ dữ liệu để học được meaningful patterns
    
-2. **Từ "computer" xuất hiện rất ít**
-   - UD dataset là linguistic treebank, không phải technology text
-   - Không đủ context để học semantic meaning
+2. **Từ "computer" xuất hiện rất ít trong UD dataset**
+   - UD dataset là linguistic treebank, tập trung vào cấu trúc ngữ pháp
+   - Không có nhiều technology-related content
+   - Không đủ context examples để học semantic meaning của "computer"
    
-3. **Overfitting**
-   - Model học "noise" thay vì "signal"
-   - Vector của từ hiếm bị random
+3. **Overfitting trầm trọng**
+   - Model học "noise" (random co-occurrences) thay vì "signal" (true semantic relationships)
+   - Vector của từ hiếm bị random initialization và không được update đủ
+   - Score 0.99+ cho thấy model đang "memorize" thay vì "generalize"
 
 4. **Min count = 2 quá thấp**
-   - Giữ lại quá nhiều từ hiếm
-   - Vocabulary bloat
+   - Giữ lại quá nhiều từ xuất hiện ít (<5 lần)
+   - Vocabulary bloat với nhiều từ hiếm không đáng tin cậy
+   - Nên tăng lên min_count=5 hoặc 10
 
-**Đánh giá:** (Poor - Model không sử dụng được)
+**So sánh với GloVe:**
+```
+GloVe (6B tokens):     computers(0.92), software(0.88), technology(0.85) ✅
+Custom model (200K):   pull(0.99), graduate(0.99), touch(0.99)          ❌
+```
+
+**Đánh giá:** ❌ **Poor - Model không sử dụng được cho production**
+
 #### 2.2. Kết Quả Word Analogy
 **Test:** king - man + woman = ?
 **Output:**
 ```
-launcher   0.9908
-tumor      0.9899
-volunteer  0.9894
-cell       0.9885
-chicks     0.9885
+harmless     0.9902
+meiring      0.9898
+elsewhere    0.9887
+stalls       0.9884
+privileged   0.9880
 ```
+
 **Phân tích:**
 - ❌ **Hoàn toàn sai** - Không có "queen" trong top 5
-- ❌ **Từ ngẫu nhiên** - launcher, tumor không liên quan
-- ❌ **Không học được gender relationship**
+- ❌ **Từ ngẫu nhiên** - harmless, meiring, elsewhere, stalls không liên quan đến royalty
+- ❌ **Không học được gender relationship** (king/queen, man/woman)
+- ❌ **Score quá cao** (>0.98) - Lại là dấu hiệu overfitting
+
 **So sánh với GloVe:**
 ```
-GloVe có thể: king - man + woman ≈ queen
-Custom model: Không thể
+GloVe có thể:     king - man + woman ≈ queen (correct analogy) ✅
+Custom model:     king - man + woman ≈ harmless (nonsense)     ❌
 ```
+
+**Lý do thất bại:**
+- Word analogy cần model học được **fine-grained semantic relationships**
+- Cần ít nhất **100M-1B tokens** để capture gender, royalty, plurality patterns
+- 14K câu hoàn toàn không đủ
+
 **Kết luận Task 3:**
-- ⚠️ **Model không đạt yêu cầu** cho production
-- 📚 **Bài học:** Word2Vec cần **millions of tokens** để train tốt
-- 💡 **Giải pháp:** 
-  - Dùng dataset lớn hơn (>10M tokens)
-  - Hoặc dùng pre-trained model
-  - Hoặc fine-tune pre-trained model
+- ⚠️ **Model hoàn toàn không đạt yêu cầu** cho bất kỳ ứng dụng thực tế nào
+- 📚 **Bài học quan trọng:** Word2Vec cần **hàng triệu tokens** để train tốt
+  - Minimum: 10M tokens cho domain-specific tasks
+  - Recommended: 100M-1B tokens cho general-purpose
+- 💡 **Giải pháp khả thi:** 
+  1. **Dùng dataset lớn hơn** (Wikipedia dump ~3B tokens)
+  2. **Sử dụng pre-trained model** (GloVe, FastText)
+  3. **Fine-tune pre-trained model** trên domain-specific data
+  4. **Tăng min_count=5** để lọc bỏ từ hiếm
+  5. **Tăng epochs** nếu có data lớn hơn
+- 🎯 **Takeaway:** Task 3 thành công trong việc **minh họa tầm quan trọng của data size** trong Word2Vec training
 ---
 
 ### 3. 📊 Task 4: Phân tích Spark Word2Vec trên C4 Dataset

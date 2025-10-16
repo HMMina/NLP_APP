@@ -4,7 +4,7 @@ from gensim.utils import simple_preprocess
 
 # Đường dẫn file dữ liệu
 DATA_PATH = "C:\\Users\\ADMIN\\.vscode\\NLP_APP\\UD_English-EWT\\en_ewt-ud-train.txt"
-RESULT_PATH = "results/word2vec_ewt.model"
+RESULT_PATH = "C:\\Users\\ADMIN\\.vscode\\NLP_APP\\Lab04\\results\\word2vec_ewt.model"
 
 
 def read_corpus(file_path):
