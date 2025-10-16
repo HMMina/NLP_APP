@@ -34,7 +34,6 @@ def main():
     print("Huấn luyện xong!")
 
     print("\n=== Step 3: Lưu mô hình vào results/ ===")
-    os.makedirs("results", exist_ok=True)
     model.save(RESULT_PATH)
     print(f"Đã lưu mô hình tại: {RESULT_PATH}")
 
