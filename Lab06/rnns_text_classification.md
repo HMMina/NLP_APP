@@ -1,5 +1,13 @@
 # Báo Cáo Lab 06: Phân Loại Văn Bản với RNNs (lab6_rnns_text_classification.ipynb)
 
+## 📋 Mục Lục
+1. [Giải Thích Các Bước Triển Khai](#1-giải-thích-các-bước-triển-khai)
+2. [Hướng Dẫn Thực Thi Mã](#2-hướng-dẫn-thực-thi-mã)
+3. [Phân Tích Kết Quả](#3-phân-tích-kết-quả)
+4. [Thách Thức và Giải Pháp](#4-thách-thức-và-giải-pháp)
+5. [Hướng Phát Triển](#5-hướng-phát-triển)
+
+---
 ## 1. Giải Thích Các Bước Triển Khai
 ### Task 0: Data Loading & Label Encoding
 - **Mục đích**: Chuẩn bị dữ liệu cho quá trình huấn luyện.
@@ -119,12 +127,14 @@ Lab06/
 
 ### 3.5 Kết quả Task 5
 - Bảng Tổng Hợp Kết Quả
+```
 | Pipeline | F1-score (Macro) | Test Loss | Nhận Xét |
 |----------|------------------|-----------|----------|
 | TF-IDF + Logistic Regression | 0.835298 | 1.050197 | Hiệu quả bất ngờ, đơn giản và nhanh. |
 | Word2Vec (Avg) + Dense | 0.304154 | 2.452722 | Mất thông tin thứ tự, mạng nông. |
 | Pre-trained Embedding + LSTM | 0.376478 | 2.108491 | Xử lý tuần tự ổn, tuy nhiên cần tuning thêm. |
 | Scratch Embedding + LSTM | 0.178246 | 2.868297 | Flexible nhưng cần nhiều dữ liệu hơn. |
+```
 
 - Nhận Xét Chung:
   - TF-IDF + LR vẫn là lựa chọn tốt cho tập dữ liệu nhỏ và câu đơn giản.
@@ -132,11 +142,13 @@ Lab06/
   - Pre-trained embeddings giúp cải thiện so với học từ đầu, nhưng vẫn chưa đủ để vượt qua phương pháp truyền thống.
 
 - Phân Tích Định Tính Các Câu Khó
+```
 | Sentence | True Intent | TF-IDF + LR | W2V Avg + Dense | Pretrained LSTM | Scratch LSTM |
 |-----------|--------------|--------------|------------------|------------------|---------------|
 | can you remind me to not call my mom | reminder_create | calendar_set | general_quirky | takeaway_query | email_sendemail |
 | is it going to be sunny or rainy tomorrow | weather_query | weather_query | qa_maths | qa_maths | takeaway_order |
 | find a flight from new york to london but not ... | flight_search | general_negate | transport_query | email_sendemail | calendar_set |
+```
 
 - **Câu 1:** "can you remind me to not call my mom" với phủ định "not call"
   - TF-IDF không hiểu phủ định dễ nhầm “remind” với “calendar_set”
@@ -175,4 +187,5 @@ Lab06/
 - Advanced preprocessing (spelling correction, normalization).
 - Hyperparameter optimization với tools như Optuna.
 
+---
 ---
