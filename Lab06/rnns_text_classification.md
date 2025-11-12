@@ -126,7 +126,7 @@ Lab06/
 - Cần nhiều dữ liệu hơn để embedding layer học hiệu quả.
 
 ### 3.5 Kết quả Task 5
-- Bảng Tổng Hợp Kết Quả
+- **Bảng Tổng Hợp Kết Quả**
 ```
 | Pipeline | F1-score (Macro) | Test Loss | Nhận Xét |
 |----------|------------------|-----------|----------|
@@ -141,7 +141,7 @@ Lab06/
   - Mô hình dựa trên embeddings và LSTM cần nhiều dữ liệu hơn để phát huy hiệu quả.
   - Pre-trained embeddings giúp cải thiện so với học từ đầu, nhưng vẫn chưa đủ để vượt qua phương pháp truyền thống.
 
-- Phân Tích Định Tính Các Câu Khó
+- **Phân Tích Định Tính Các Câu Khó**
 ```
 | Sentence | True Intent | TF-IDF + LR | W2V Avg + Dense | Pretrained LSTM | Scratch LSTM |
 |-----------|--------------|--------------|------------------|------------------|---------------|
@@ -186,6 +186,4 @@ Lab06/
 - Ensemble methods kết hợp multiple approaches.
 - Advanced preprocessing (spelling correction, normalization).
 - Hyperparameter optimization với tools như Optuna.
-
----
 ---
