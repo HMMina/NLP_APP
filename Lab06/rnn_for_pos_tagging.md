@@ -115,7 +115,7 @@ Dưới đây là kết quả chi tiết của quá trình huấn luyện qua 20
 | 19    | 3.6125     | 18.6773  | 0.8960       | |
 | 20    | 3.2173     | 18.6980  | 0.9000       | Train loss rất thấp nhưng Dev loss cao nhất. |
 
-### 3.2 Nhận Xét Chuyên Sâu
+### 3.2 Nhận Xét
 
 #### 1. Hiệu Suất Tổng Thể
 - **Đỉnh cao (Peak Performance)**: Mô hình đạt độ chính xác tốt nhất là **90.35%** tại Epoch 13. Đây là kết quả rất khả quan cho một mô hình RNN đơn giản (không dùng pre-trained embeddings hay kiến trúc phức tạp như Transformer).
