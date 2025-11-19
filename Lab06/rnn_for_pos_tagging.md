@@ -131,10 +131,6 @@ Dưới đây là kết quả chi tiết của quá trình huấn luyện qua 20
 
 #### 3. Vai Trò Của Bidirectional RNN
 - Việc accuracy đạt >90% chứng tỏ kiến trúc 2 chiều (Bidirectional) rất hiệu quả.
-- Ví dụ: Trong câu "I **book** a flight" và "A good **book**", từ "book" có embedding giống nhau nhưng ngữ cảnh (context) khác nhau. RNN 2 chiều giúp mô hình nhìn thấy "a flight" (tương lai) để quyết định "book" là VERB, và nhìn thấy "A good" (quá khứ) để quyết định "book" là NOUN.
-
-#### 4. So Sánh Với Baseline
-- Nếu gán nhãn ngẫu nhiên hoặc gán nhãn phổ biến nhất (Most Frequent Tag), độ chính xác thường chỉ đạt khoảng 80-85%.
 - Kết quả 90.35% cho thấy mô hình thực sự học được cấu trúc ngữ pháp chứ không chỉ nhớ vẹt.
 
 ### 3.3 Ví Dụ Dự Đoán
