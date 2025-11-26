@@ -9,9 +9,6 @@
 ---
 
 ## Part 1: Tìm hiểu về RNNs và Phân loại Token (lab6.ipynb)
-
-*Lưu ý: Phần này tập trung vào các kiến thức nền tảng về PyTorch (Tensor, Autograd, Embedding) cần thiết để xây dựng các mô hình RNN ở các phần sau.*
-
 ### 1. Giải Thích Các Bước Triển Khai
 #### Task 1: Làm quen với Tensor
 - **Mục đích**: Hiểu cách tạo và thao tác với cấu trúc dữ liệu cơ bản của PyTorch.
